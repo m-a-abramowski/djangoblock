@@ -1,0 +1,51 @@
+{% load mathfilters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>BlockForm</title>
+</head>
+<body>
+  <h1>Welcome to BlockForm!</h1>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Show me transactions</button>
+  </form>
+
+  {% for adr in addressData %}
+  <h2>Address: {{ adr.address }}</h2>
+  <h3>Final balance: {{ adr.final_balance |  div:100000000}} BTC</h3>
+  {% endfor %}
+  <div>{{ img }}</div>
+  <h3>Transactions:</h3>
+
+  <h4>{{ counter }} transactions</h4>
+  {% if sum %}
+  <h4>Sum: {{ sum | div:100000000}} BTC</h4>
+  {% endif %}
+  <hr>
+
+  {% for tr in trData %}
+  <p><strong>Transaction id: {{ tr.tx_id }}</strong></p>
+
+  <p>Date: {{ tr.time }} UTC</p>
+
+
+
+  <p>Value:
+  {% if tr.output != NULL %}
+  + {{tr.output | div:100000000}} BTC
+  {% elif tr.negativeoutput != NULL %}
+  - {{tr.negativeoutput | div:100000000}} BTC
+  {% endif %}
+  </p>
+  <hr>
+  {% endfor %}
+
+</body>
+</html>
